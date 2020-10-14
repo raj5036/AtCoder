@@ -1,16 +1,22 @@
 #include<bits/stdc++.h>
 using namespace std;
 #define ll long long
-int dp[1000000];
 
-int f(int *h,int i,int N){
-	if(i==N) return 0;
-	if(dp[i]!=-1) return dp[i];
-	int cost=abs(h[i]-h[i+1])+f(h,i+1,N);
-	if(i+2<N){
-		cost=min(cost, abs(h[i]-h[i+2]) )+f(h,i+2,N);
+
+int f(int *h,int N){
+	int dp[N];
+	memset(dp,0,sizeof(dp));
+	
+	dp[0]=h[0];
+	dp[1]=abs(h[0]-h[1]);
+	dp[2]=abs(h[0]-h[2]);
+	for(int i=3;i<N;i++){
+		dp[i]=min(
+			dp[i-1]+abs(h[i-1]-h[i]),
+			dp[i-2]+abs(h[i-2]-h[i])
+		);
 	}
-	return dp[i]=cost;
+	return dp[N-1];
 }
 int32_t main(){
 	int N;
@@ -18,7 +24,8 @@ int32_t main(){
 	int a[N];
 	for(int i=0;i<N;i++)
 		cin>>a[i];
-	memset(dp,-1,sizeof(dp));
-	cout<<f(a,0,N)<<endl;
+	
+	//cout<<f(a,0,N)<<endl;
+	cout<<f(a,N)<<endl;
 	return 0;
 }
